@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Turtle Clicker 🐢</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #b3ecff;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    #score {
+      font-size: 24px;
+      margin: 15px;
+    }
+
+    #turtle {
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    #turtle:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🐢 Turtle Clicker</h1>
+  <div id="score">Shells: 0</div>
+
+  <!-- Turtle emoji (simple & no image needed) -->
+  <div id="turtle" style="font-size: 150px;">🐢</div>
+
+  <script>
+    let shells = 0;
+    const scoreEl = document.getElementById("score");
+    const turtle = document.getElementById("turtle");
+
+    turtle.addEventListener("click", () => {
+      shells++;
+      scoreEl.textContent = "Shells: " + shells;
+    });
+  </script>
+
+</body>
+</html>
