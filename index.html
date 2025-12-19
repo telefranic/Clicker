@@ -18,11 +18,11 @@
 
     #score {
       font-size: 24px;
-      margin: 15px;
+      margin: 10px;
     }
 
     #turtle {
-      width: 200px;
+      font-size: 150px;
       cursor: pointer;
       transition: transform 0.1s;
     }
@@ -30,25 +30,106 @@
     #turtle:active {
       transform: scale(0.95);
     }
+
+    #shop {
+      background: #ffffffaa;
+      margin: 20px auto;
+      padding: 15px;
+      width: 300px;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
   <h1>🐢 Turtle Clicker</h1>
   <div id="score">Shells: 0</div>
+  <div id="perClick">Shells per click: 1</div>
 
-  <!-- Turtle emoji (simple & no image needed) -->
-  <div id="turtle" style="font-size: 150px;">🐢</div>
+  <div id="turtle">🐢</div>
+
+  <div id="shop">
+    <h2>🛒 Shop</h2>
+    <button onclick="buyClickUpgrade()">
+      Stronger Turtle (+1 / click) – 10 shells
+    </button>
+    <br>
+    <button onclick="buyAutoShell()">
+      Auto Shell (+1 / sec) – 25 shells
+    </button>
+    <div id="autoCount">Auto Shells: 0</div>
+  </div>
 
   <script>
-    let shells = 0;
+    // ===== Load saved data =====
+    let shells = Number(localStorage.getItem("shells")) || 0;
+    let shellsPerClick = Number(localStorage.getItem("shellsPerClick")) || 1;
+    let autoShells = Number(localStorage.getItem("autoShells")) || 0;
+
     const scoreEl = document.getElementById("score");
+    const perClickEl = document.getElementById("perClick");
+    const autoCountEl = document.getElementById("autoCount");
     const turtle = document.getElementById("turtle");
 
-    turtle.addEventListener("click", () => {
-      shells++;
+    function updateUI() {
       scoreEl.textContent = "Shells: " + shells;
+      perClickEl.textContent = "Shells per click: " + shellsPerClick;
+      autoCountEl.textContent = "Auto Shells: " + autoShells;
+    }
+
+    function saveGame() {
+      localStorage.setItem("shells", shells);
+      localStorage.setItem("shellsPerClick", shellsPerClick);
+      localStorage.setItem("autoShells", autoShells);
+    }
+
+    // ===== Clicking turtle =====
+    turtle.addEventListener("click", () => {
+      shells += shellsPerClick;
+      updateUI();
+      saveGame();
     });
+
+    // ===== Shop functions =====
+    function buyClickUpgrade() {
+      if (shells >= 10) {
+        shells -= 10;
+        shellsPerClick += 1;
+        updateUI();
+        saveGame();
+      } else {
+        alert("Not enough shells!");
+      }
+    }
+
+    function buyAutoShell() {
+      if (shells >= 25) {
+        shells -= 25;
+        autoShells += 1;
+        updateUI();
+        saveGame();
+      } else {
+        alert("Not enough shells!");
+      }
+    }
+
+    // ===== Auto shell generator =====
+    setInterval(() => {
+      if (autoShells > 0) {
+        shells += autoShells;
+        updateUI();
+        saveGame();
+      }
+    }, 1000);
+
+    // Initial UI update
+    updateUI();
   </script>
 
 </body>
